@@ -1,0 +1,463 @@
+$container-big: 1440px;
+$container-small: 1100px;
+$centrator: 0 auto;
+$color-info: #56b280;
+$color-info-hover: #459469;
+$color-main: #1d252c;
+$color-footer: #272727;
+$color-text-gray-bg: #e1e1e1;
+$font-main: "Roboto", sans-serif;
+$font-sub-main: "Montserrat", sans-serif;
+$font-nav-footer: "Raleway", sans-serif;
+
+@mixin flexible() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hover-link() {
+  transition: color 0.3s;
+  &:hover {
+    color: $color-info;
+  }
+}
+
+@mixin hover-icon() {
+  transition: filter 0.3s, transform 0.3s;
+  &:hover {
+    filter: saturate(2.5);
+    transform: scale(1.1);
+  }
+}
+
+@mixin hover-button() {
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  &:hover {
+    background-color: #fff;
+    color: $color-info-hover;
+    transform: scale(1.1);
+    border: 1px solid $color-info-hover;
+  }
+}
+
+@mixin list-style() {
+  list-style-type: none;
+  padding: 0;
+}
+
+.container {
+  width: $container-big;
+  margin: $centrator;
+  font-size: 16px;
+}
+.header {
+  @include flexible();
+  width: $container-small;
+  margin: $centrator;
+  justify-content: space-between;
+  height: 75px;
+}
+.logo {
+  @include hover-icon();
+  width: 126px;
+  height: 34px;
+  cursor: pointer;
+}
+.menu {
+  @include flexible();
+  @include list-style();
+  gap: 75px;
+
+  &__item {
+    cursor: pointer;
+    color: $color-main;
+    font-family: $font-main;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  &__link {
+    @include hover-link();
+    color: $color-main;
+  }
+
+  &__item_sub {
+    position: relative;
+    &:hover .sub-menu {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.icon-list {
+  @include flexible();
+  @include list-style();
+  gap: 20px;
+}
+
+.sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding: 0;
+
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s, transform 0.3s, background-color 5s;
+
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  width: 100%;
+  text-align: center;
+  border-radius: 2px;
+
+  &__item {
+    cursor: pointer;
+    list-style-type: none;
+    backdrop-filter: blur(10px);
+    margin-top: 10px;
+
+    @include hover-link();
+    transition: transform 0.3s;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.icon {
+  width: 34px;
+  height: 34px;
+  @include hover-icon();
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+}
+.greeting {
+  height: 100vh;
+  max-height: 780px;
+  background-image: url(../images/bg-image.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-color: $color-info;
+  @include flexible();
+
+  &__bord {
+    @include flexible();
+    flex-direction: column;
+    border-radius: 2px;
+    background: rgba(247, 248, 250, 0.8);
+    backdrop-filter: blur(12px);
+    width: 730px;
+    height: 349px;
+  }
+  &__text {
+    margin: 0 0 45px 0;
+    max-width: 535px;
+    text-align: center;
+    color: $color-main;
+    font-family: "Raleway", sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+  }
+}
+.title {
+  color: $color-main;
+  font-family: $font-sub-main;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 500;
+  margin: 0 0 10px 0;
+}
+.button {
+  border-radius: 4px;
+  background-color: $color-info;
+  display: block;
+  padding: 8px 44px;
+  color: $color-text-gray-bg;
+  text-decoration: none;
+  @include hover-button();
+
+  font-family: $font-main;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.products {
+  width: $container-small;
+  margin: $centrator;
+  @include flexible();
+  flex-direction: column;
+}
+
+.subtitle {
+  margin: 15px 0 0 0;
+  color: $color-main;
+  font-family: $font-sub-main;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+.cards {
+  @include flexible();
+  flex-wrap: wrap;
+  gap: 26px;
+  @include list-style();
+}
+.card {
+  display: block;
+  width: 255px;
+  height: 255px;
+  &:hover {
+    @include hover-icon();
+  }
+
+  &__image {
+    height: 210px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__link {
+    text-decoration: none;
+  }
+
+  &__title {
+    margin: 0;
+    padding-left: 26px;
+    color: $color-main;
+    font-family: $font-sub-main;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: -0.9px;
+  }
+  &__price {
+    display: block;
+    margin: 0;
+    text-align: right;
+    color: var(--green, #56b280);
+    text-align: right;
+    font-family: $font-main;
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+
+.detail {
+  width: $container-small;
+  margin: $centrator;
+  height: 800px;
+  @include flexible();
+  justify-content: space-between;
+
+  &__title {
+    width: 350px;
+  }
+
+  &__subtitle {
+    color: $color-info;
+    font-family: $font-sub-main;
+    font-weight: 400;
+    line-height: 22px;
+  }
+  &__button {
+    width: 194px;
+    text-align: center;
+  }
+  &__image {
+    height: 350px;
+    width: 470px;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.list-detail {
+  padding-left: 25px;
+  list-style-type: none;
+
+  &__item {
+    position: relative;
+    color: $color-main;
+    font-family: $font-sub-main;
+    font-weight: 400;
+    line-height: 28px;
+
+    &::before {
+      content: url("../images/icons/checkmark.svg");
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      left: -25px;
+      top: 3px;
+    }
+  }
+}
+
+.reviews {
+  width: $container-small;
+  margin: $centrator;
+  height: 510px;
+
+  &__title {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  &__subtitle {
+    text-align: center;
+    margin: 0 0 50px 0;
+  }
+  &__text {
+    color: $color-main;
+    font-family: $font-sub-main;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 28px;
+    margin: 0 0 8px 0;
+    width: 305px;
+  }
+  &__signature {
+    color: #7c8087;
+    font-family: $font-main;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: normal;
+  }
+}
+
+.feedbacks {
+  margin: 0;
+  height: 322px;
+  padding-left: 0;
+  @include flexible();
+  justify-content: space-between;
+  gap: 30px;
+
+  &__item {
+    @include flexible();
+    width: 350px;
+    flex-direction: column;
+  }
+
+  &__avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 14px;
+  }
+}
+
+.rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  margin-bottom: 22px;
+
+  &__star {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    background-image: url("../images/icons/star-0.svg");
+    background-size: 24px;
+    background-repeat: no-repeat;
+  }
+
+  input {
+    display: none;
+    margin-bottom: 22px;
+  }
+
+  input:checked ~ .rating__star {
+    background-image: url("../images/icons/star-1.svg");
+  }
+}
+
+.popular {
+  height: 450px;
+  @include flexible();
+  flex-direction: column;
+}
+.footer {
+  background-color: $color-footer;
+  height: 383px;
+  @include flexible();
+
+  &__wrapper {
+    max-width: $container-small;
+    margin: $centrator;
+    @include flexible();
+    justify-content: space-between;
+    width: $container-small;
+    border-top: 2px solid white;
+    padding-top: 60px;
+  }
+
+  &__wrapper-text {
+    position: relative;
+    bottom: 50px;
+    color: $color-text-gray-bg;
+    font-family: $font-sub-main;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.5px;
+  }
+  &__text {
+    max-width: 260px;
+  }
+  &__wrapper-nav {
+    @include flexible();
+    gap: 35px;
+  }
+  &__nav-title {
+    color: $color-info;
+    font-family: $font-nav-footer;
+    font-weight: 500;
+    line-height: 28px;
+    margin: 0 0 25px 0;
+  }
+  &__nav-links {
+    margin: 0;
+    & li {
+      margin-bottom: 20px;
+    }
+    & li:last-child {
+      margin-bottom: 0;
+    }
+
+    @include list-style();
+  }
+  &__nav-link {
+    color: $color-text-gray-bg;
+    font-family: $font-sub-main;
+    font-weight: 500;
+    line-height: 28px;
+    text-decoration: none;
+    &:hover {
+      @include hover-link();
+    }
+  }
+}
+
+.logo-footer {
+  width: 236px;
+  height: 64px;
+  object-fit: cover;
+  object-position: center;
+}
