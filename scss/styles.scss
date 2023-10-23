@@ -1,5 +1,11 @@
 $container-big: 1440px;
 $container-small: 1100px;
+$small-screen-width: 320px;
+$big-font-size: 40px;
+$medium-font-size: 18px;
+$small-font-size: 16px;
+$button-price-font-size: 20px;
+$review-font-size: 22px;
 $centrator: 0 auto;
 $color-info: #56b280;
 $color-info-hover: #459469;
@@ -10,10 +16,17 @@ $font-main: "Roboto", sans-serif;
 $font-sub-main: "Montserrat", sans-serif;
 $font-nav-footer: "Raleway", sans-serif;
 
-@mixin flexible() {
+@mixin flexible($direction: row, $justify: center) {
   display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
   align-items: center;
-  justify-content: center;
+}
+
+@mixin edgeIndent() {
+  box-sizing: border-box;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 @mixin hover-link() {
@@ -47,24 +60,45 @@ $font-nav-footer: "Raleway", sans-serif;
 }
 
 .container {
-  width: $container-big;
+  width: clamp($small-screen-width, 100vw, $container-big);
   margin: $centrator;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, $small-font-size);
 }
+
 .header {
-  @include flexible();
-  width: $container-small;
+  @include flexible(row, space-between);
+  width: clamp($small-screen-width, 76.38vw, $container-small);
   margin: $centrator;
-  justify-content: space-between;
   height: 75px;
+  @include edgeIndent();
 }
-.logo {
+
+.link-logo {
+  text-decoration: none;
+  color: $color-info;
+  font-family: $font-nav-footer;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  @include flexible();
   @include hover-icon();
-  width: 126px;
+
+  &__text {
+    padding-left: 10px;
+  }
+}
+
+.logo {
+  width: 34px;
   height: 34px;
   cursor: pointer;
 }
+
 .menu {
+  @include flexible();
+}
+
+.menu-list {
   @include flexible();
   @include list-style();
   gap: 75px;
@@ -73,7 +107,7 @@ $font-nav-footer: "Raleway", sans-serif;
     cursor: pointer;
     color: $color-main;
     font-family: $font-main;
-    font-size: 16px;
+    font-size: $small-font-size;
     font-weight: 500;
     line-height: normal;
   }
@@ -92,10 +126,119 @@ $font-nav-footer: "Raleway", sans-serif;
   }
 }
 
+.burger-checkbox {
+  position: absolute;
+  visibility: hidden;
+
+  &:checked + .burger::before {
+    top: 11px;
+    transform: rotate(45deg);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0);
+    transition: box-shadow 0.15s, top 0.3s, transform 0.3s 0.15s;
+  }
+  &:checked + .burger::after {
+    bottom: 11px;
+    transform: rotate(-45deg);
+    transition: bottom 0.3s, transform 0.3s 0.15s;
+  }
+}
+
+.burger {
+  cursor: pointer;
+  display: none;
+  position: relative;
+  border: none;
+  background: transparent;
+  width: 40px;
+  height: 26px;
+  margin-left: 96px;
+
+  &::before,
+  &::after {
+    content: "";
+    left: 0;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 3px;
+    border-radius: 10px;
+    background: #000;
+  }
+
+  &::before {
+    top: 0;
+    box-shadow: 0 11px 0 #000;
+    transition: box-shadow 0.3s 0.15s, top 0.3s 0.15s, transform 0.3s;
+  }
+
+  &::after {
+    bottom: 0;
+    transition: bottom 0.3s 0.15s, transform 0.3s;
+  }
+}
+
 .icon-list {
   @include flexible();
   @include list-style();
   gap: 20px;
+}
+
+@media (max-width: 1000px) {
+  .icon-list {
+    position: absolute;
+    position: fixed;
+    top: 84%;
+    left: 45%;
+    display: none;
+    z-index: 5;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .menu-list {
+    display: none;
+
+    &__item {
+      padding: 8px;
+      font-size: $medium-font-size;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  .burger-checkbox {
+    &:checked ~ .menu-list {
+      margin: 0;
+      transform: translateX(0);
+      top: 0;
+      left: 0;
+      position: fixed;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 12px;
+      transition: 0.3s;
+      width: 100vw;
+      min-height: 100vh;
+      background: $color-text-gray-bg;
+      z-index: 3;
+    }
+
+    &:checked ~ .burger {
+      z-index: 4;
+    }
+
+    &:checked ~ .icon-list {
+      display: flex;
+    }
+  }
+}
+
+.active {
+  display: flex;
 }
 
 .sub-menu {
@@ -107,10 +250,6 @@ $font-nav-footer: "Raleway", sans-serif;
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.3s, transform 0.3s, background-color 5s;
-
-  flex-direction: column;
-  width: 100%;
-  text-align: center;
   width: 100%;
   text-align: center;
   border-radius: 2px;
@@ -140,6 +279,7 @@ $font-nav-footer: "Raleway", sans-serif;
   flex-direction: column;
   gap: 90px;
 }
+
 .greeting {
   height: 100vh;
   max-height: 780px;
@@ -151,13 +291,13 @@ $font-nav-footer: "Raleway", sans-serif;
   @include flexible();
 
   &__bord {
-    @include flexible();
-    flex-direction: column;
+    @include flexible(column);
     border-radius: 2px;
     background: rgba(247, 248, 250, 0.8);
     backdrop-filter: blur(12px);
-    width: 730px;
-    height: 349px;
+    width: clamp(265px, 88vw, 730px);
+    height: clamp(270px, 55vw, 349px);
+    @include edgeIndent();
   }
   &__text {
     margin: 0 0 45px 0;
@@ -165,57 +305,64 @@ $font-nav-footer: "Raleway", sans-serif;
     text-align: center;
     color: $color-main;
     font-family: "Raleway", sans-serif;
-    font-size: 18px;
+    font-size: clamp(16px, 2vw, $medium-font-size);
     font-style: normal;
     font-weight: 400;
   }
 }
+
 .title {
   color: $color-main;
   font-family: $font-sub-main;
-  font-size: 40px;
+  font-size: clamp(28px, 5vw, $big-font-size);
+  text-align: center;
   font-style: normal;
   font-weight: 500;
   margin: 0 0 10px 0;
 }
+
 .button {
+  text-align: center;
   border-radius: 4px;
   background-color: $color-info;
   display: block;
-  padding: 8px 44px;
+  padding: 8px clamp(12px, 2vw, 44px);
   color: $color-text-gray-bg;
   text-decoration: none;
   @include hover-button();
 
   font-family: $font-main;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, $button-price-font-size);
   font-style: normal;
   font-weight: 500;
   line-height: normal;
 }
 
 .products {
-  width: $container-small;
+  width: clamp($small-screen-width, 76.38vw, $container-small);
   margin: $centrator;
-  @include flexible();
-  flex-direction: column;
+  @include flexible(column);
+  @include edgeIndent();
 }
 
 .subtitle {
   margin: 15px 0 0 0;
   color: $color-main;
   font-family: $font-sub-main;
-  font-size: 18px;
+  text-align: center;
+  font-size: clamp(16px, 3vw, 18px);
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0.1px;
 }
+
 .cards {
   @include flexible();
   flex-wrap: wrap;
-  gap: 26px;
+  gap: 13px;
   @include list-style();
 }
+
 .card {
   display: block;
   width: 255px;
@@ -248,23 +395,23 @@ $font-nav-footer: "Raleway", sans-serif;
     display: block;
     margin: 0;
     text-align: right;
-    color: var(--green, #56b280);
+    color: $color-info;
     text-align: right;
     font-family: $font-main;
-    font-size: 20px;
+    font-size: $button-price-font-size;
     font-weight: 500;
   }
 }
 
 .detail {
-  width: $container-small;
+  width: clamp($small-screen-width, 76.38vw, $container-small);
   margin: $centrator;
-  height: 800px;
-  @include flexible();
-  justify-content: space-between;
+  min-height: 800px;
+  @include flexible(row, space-between);
+  @include edgeIndent();
 
   &__title {
-    width: 350px;
+    max-width: 350px;
   }
 
   &__subtitle {
@@ -278,10 +425,23 @@ $font-nav-footer: "Raleway", sans-serif;
     text-align: center;
   }
   &__image {
-    height: 350px;
-    width: 470px;
+    max-height: 350px;
+    max-width: 470px;
+    width: 100%;
     object-fit: cover;
     object-position: center;
+  }
+}
+
+@media (max-width: 800px) {
+  .detail {
+    flex-direction: column;
+    &__wrapper-text {
+      @include flexible(column);
+    }
+    &__subtitle {
+      text-align: center;
+    }
   }
 }
 
@@ -308,9 +468,10 @@ $font-nav-footer: "Raleway", sans-serif;
 }
 
 .reviews {
-  width: $container-small;
+  @include edgeIndent();
+  width: clamp($small-screen-width, 76.38vw, $container-small);
   margin: $centrator;
-  height: 510px;
+  min-height: 510px;
 
   &__title {
     text-align: center;
@@ -319,22 +480,24 @@ $font-nav-footer: "Raleway", sans-serif;
 
   &__subtitle {
     text-align: center;
-    margin: 0 0 50px 0;
+    margin: 0 0 30px 0;
   }
+
   &__text {
     color: $color-main;
     font-family: $font-sub-main;
     text-align: center;
-    font-size: 22px;
+    font-size: clamp(16px, 3vw, $review-font-size);
     font-weight: 500;
     line-height: 28px;
     margin: 0 0 8px 0;
     width: 305px;
   }
+
   &__signature {
     color: #7c8087;
     font-family: $font-main;
-    font-size: 18px;
+    font-size: clamp(14px, 3vw, $medium-font-size);
     font-weight: 400;
     line-height: normal;
   }
@@ -342,16 +505,14 @@ $font-nav-footer: "Raleway", sans-serif;
 
 .feedbacks {
   margin: 0;
-  height: 322px;
+  min-height: 322px;
   padding-left: 0;
   @include flexible();
-  justify-content: space-between;
-  gap: 30px;
+  flex-wrap: wrap;
 
   &__item {
-    @include flexible();
+    @include flexible(column);
     width: 350px;
-    flex-direction: column;
   }
 
   &__avatar {
@@ -361,13 +522,12 @@ $font-nav-footer: "Raleway", sans-serif;
     object-fit: cover;
     object-position: center;
     margin-bottom: 14px;
+    margin-top: 20px;
   }
 }
 
 .rating {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
+  @include flexible(row-reverse);
   margin-bottom: 22px;
 
   &__star {
@@ -390,21 +550,20 @@ $font-nav-footer: "Raleway", sans-serif;
 }
 
 .popular {
-  height: 450px;
-  @include flexible();
-  flex-direction: column;
+  min-height: 450px;
+  @include flexible(column);
+  @include edgeIndent();
 }
+
 .footer {
   background-color: $color-footer;
-  height: 383px;
+  min-height: 383px;
   @include flexible();
 
   &__wrapper {
-    max-width: $container-small;
     margin: $centrator;
-    @include flexible();
-    justify-content: space-between;
-    width: $container-small;
+    @include flexible(row, space-between);
+    width: clamp($small-screen-width, 76.38vw, $container-small);
     border-top: 2px solid white;
     padding-top: 60px;
   }
@@ -418,13 +577,16 @@ $font-nav-footer: "Raleway", sans-serif;
     line-height: 22px;
     letter-spacing: -0.5px;
   }
+
   &__text {
     max-width: 260px;
   }
+
   &__wrapper-nav {
     @include flexible();
     gap: 35px;
   }
+
   &__nav-title {
     color: $color-info;
     font-family: $font-nav-footer;
@@ -432,6 +594,7 @@ $font-nav-footer: "Raleway", sans-serif;
     line-height: 28px;
     margin: 0 0 25px 0;
   }
+
   &__nav-links {
     margin: 0;
     & li {
@@ -443,6 +606,7 @@ $font-nav-footer: "Raleway", sans-serif;
 
     @include list-style();
   }
+
   &__nav-link {
     color: $color-text-gray-bg;
     font-family: $font-sub-main;
@@ -460,4 +624,32 @@ $font-nav-footer: "Raleway", sans-serif;
   height: 64px;
   object-fit: cover;
   object-position: center;
+}
+
+@media (max-width: 920px) {
+  .footer {
+    &__wrapper {
+      flex-direction: column;
+      margin-top: 60px;
+      margin-bottom: 40px;
+    }
+    &__wrapper-text {
+      bottom: 0;
+      padding-bottom: 30px;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .footer {
+    &__wrapper-nav {
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    &__nav-title {
+      margin-bottom: 0;
+    }
+  }
 }
